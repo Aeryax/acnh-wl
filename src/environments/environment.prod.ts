@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  frontUrl: 'https://acnh-wl.dev.kazhord.fr/'
 };
