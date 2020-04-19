@@ -121,8 +121,13 @@
               "devServerTarget": "acnh-wl:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
-    }},
+    }
+  },
   "defaultProject": "acnh-wl"
 }
