@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { VillagerComponent } from './villager/villager.component';
 import { FormsModule } from '@angular/forms';
 import { VillagerFilterPipe } from './villager/villager-filter.pipe';
+import { VillagerService } from './villager/villager.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,9 @@ import { VillagerFilterPipe } from './villager/villager-filter.pipe';
     NgbModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [
+    VillagerService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

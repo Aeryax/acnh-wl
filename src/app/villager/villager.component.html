@@ -24,7 +24,7 @@
 <div class="container">
     <div class="row">
         <!-- 3 A refactor en sous composant de carte d'habitant -->
-        <div class="card col-sm-3" [ngClass]="{'red': villager.owned}" *ngFor="let villager of test">
+        <div class="card col-sm-3" [ngClass]="{'red': villager.owned}" *ngFor="let villager of villagersWL">
             <img class="card-img-top card-image"
                 src="https://villagerdb.com/images/villagers/medium/{{villager.id}}.png" alt="{{villager.name}}">
             <div class="card-body">
@@ -65,7 +65,7 @@
                         <div class="input-group-text">Genre :</div>
                     </div>
                     <select class="form-control" id="selectGender" [(ngModel)]="genderCriteria">
-                    <option *ngFor="let g of getListGender()" value="{{g.value}}">{{g.name}}</option>
+                    <option *ngFor="let g of genders" value="{{g.value}}">{{g.name}}</option>
                     </select>
                 </div>
             </div>
@@ -77,14 +77,14 @@
                       <div class="input-group-text">Espèce :</div>
                     </div>
                     <select class="form-control" id="selectSpecies" [(ngModel)]="speciesCriteria">
-                    <option *ngFor="let s of getListSpecies()" value="{{s.value}}">{{s.name}}</option>
+                    <option *ngFor="let s of species" value="{{s.value}}">{{s.name}}</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="card col-sm-3" *ngFor="let villager of vill | villagerFilter: { species: speciesCriteria, gender: genderCriteria }">
+        <div class="card col-sm-3" *ngFor="let villager of villagers | villagerFilter: { species: speciesCriteria, gender: genderCriteria }">
             <img class="card-img-top card-image"
                 src="https://villagerdb.com/images/villagers/medium/{{villager.id}}.png" alt="{{villager.name}}">
             <div class="card-body">
