@@ -59,6 +59,11 @@ export class VillagerComponent implements OnInit {
           this.villagersWL.push(objUrl);
         }
       });
+
+      if (this.villagersWL.length === 0) {
+        this.showCriteria = true;
+      }
+
       this.generateUrl();
     });
 
