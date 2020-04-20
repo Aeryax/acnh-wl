@@ -6,11 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { VillagerComponent } from './villager/villager.component';
 import { FormsModule } from '@angular/forms';
+import { VillagerFilterPipe } from './villager/villager-filter.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    VillagerComponent
+    VillagerComponent,
+    VillagerFilterPipe
   ],
   imports: [
     BrowserModule,

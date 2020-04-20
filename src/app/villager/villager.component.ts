@@ -17,22 +17,30 @@ export class VillagerComponent implements OnInit {
 
   test: Villager[];
   url: string;
+  vill: Villager[];
+  showCriteria = false;
+  speciesCriteria: string;
+  genderCriteria: string;
 
   public model: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    ) { }
+    ) {
+      this.vill = villagers;
+    }
 
   ngOnInit(): void {
+    this.genderCriteria = '*';
+    this.speciesCriteria = '*';
     this.activatedRoute.paramMap.subscribe(params => {
       const base64: string = params.get('b');
       this.test = [];
       try {
+        // A refactor dans un service
         const arrUrl = JSON.parse(atob(decodeURIComponent(base64)));
         arrUrl.forEach(val => {
-          console.log(val.i)
           const objUrl: Villager = villagers.find(elem => {
             return elem.id === val.i;
           });
@@ -62,10 +70,7 @@ export class VillagerComponent implements OnInit {
 
   onSelect(e: NgbTypeaheadSelectItemEvent) {
     e.preventDefault();
-    if (this.test.indexOf(e.item) === -1 && this.test.length < 10) {
-      this.test.push(e.item);
-      this.generateUrl();
-    }
+    this.add(e.item);
 
     this.model = '';
   }
@@ -82,12 +87,21 @@ export class VillagerComponent implements OnInit {
   }
 
   copyText(inputElement) {
+    // TODO : Ajouter une notification pour indiquer la réussite
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
   }
 
-  delete(villager: Villager) {
+  add(villager: Villager): void {
+    // 10 = nombre d'habitants, à mettre en constante
+    if (this.test.indexOf(villager) === -1 && this.test.length < 10) {
+      this.test.push(villager);
+      this.generateUrl();
+    }
+  }
+
+  delete(villager: Villager): void {
     const index = this.test.findIndex(elem => {
       return elem.id === villager.id;
     });
@@ -95,6 +109,48 @@ export class VillagerComponent implements OnInit {
       this.test.splice(index, 1);
     }
     this.generateUrl();
+  }
+
+  showHideCriteria(): void {
+    this.showCriteria = !this.showCriteria;
+  }
+
+  getListGender(): any[] {
+    // a refactor, il ne faut pas construire la liste plusieurs fois
+    const listGender = [{ value: '*', name: 'Non renseigné'}];
+    villagers.forEach(elem => {
+      const f = listGender.find(elem2 => {
+        return elem2.value === elem.gender;
+      });
+      if (f === undefined) {
+        listGender.push({ value: elem.gender, name: elem.gender});
+      }
+    });
+
+    listGender.sort((a: any, b: any) => {
+      return a.value.localeCompare(b.value);
+    });
+
+    return listGender;
+  }
+
+  getListSpecies(): any[] {
+    // a refactor, il ne faut pas construire la liste plusieurs fois
+    const listSpecies = [{ value: '*', name: 'Non renseigné'}];
+    villagers.forEach(elem => {
+      const f = listSpecies.find(elem2 => {
+        return elem2.value === elem.species;
+      });
+      if (f === undefined) {
+        listSpecies.push({ value: elem.species, name: elem.species});
+      }
+    });
+
+    listSpecies.sort((a: any, b: any) => {
+      return a.value.localeCompare(b.value);
+    });
+
+    return listSpecies;
   }
 
 }

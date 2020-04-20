@@ -1,41 +1,104 @@
 <h1>Ma wishlist ACNH</h1>
 
 <p>Ajouter un villageois :</p>
+<!-- 1 A refactor en sous composant de recherche par autocomplétion -->
 <ng-template #rt let-r="result" let-t="term">
-    <img src="https://villagerdb.com/images/villagers/medium/{{r.id}}.png" alt="{{r.name}}" width="20px" style="padding-right: 5px;"/>
+    <img src="https://villagerdb.com/images/villagers/medium/{{r.id}}.png" alt="{{r.name}}" width="20px"
+        style="padding-right: 5px;" />
     <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
 </ng-template>
 
-<input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="onSelect($event)"/>
+<input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"
+    [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="onSelect($event)" />
+<!-- 1 A refactor en sous composant -->
 <hr>
+<!-- 2 A refactor en sous composant de barre d'url -->
 <div class="input-group mb-3">
     <div class="input-group-prepend">
         <button class="btn btn-success" type="button" (click)="copyText(inputElement)">Copier</button>
     </div>
     <input type="text" class="form-control" value="{{url}}" readonly="true" #inputElement>
 </div>
+<!-- 2 A refactor en sous composant -->
 <hr>
 <div class="container">
     <div class="row">
+        <!-- 3 A refactor en sous composant de carte d'habitant -->
         <div class="card col-sm-3" [ngClass]="{'red': villager.owned}" *ngFor="let villager of test">
-            <img class="card-img-top card-image" src="https://villagerdb.com/images/villagers/medium/{{villager.id}}.png" alt="{{villager.name}}">
+            <img class="card-img-top card-image"
+                src="https://villagerdb.com/images/villagers/medium/{{villager.id}}.png" alt="{{villager.name}}">
             <div class="card-body">
-            <h5 class="card-title">{{villager.name}}</h5>
-            <p class="card-text">
-                <ul>
-                    <li>Espèce : {{villager.species}}</li>
-                    <li>Genre : {{villager.gender}}</li>
-                    <li>Anniversaire : {{villager.birthday}}</li>
-                </ul>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="villager.owned" id="possCheck" (change)="generateUrl()">
-                <label class="form-check-label" for="possCheck">
-                Possédé
-                </label>
+                <h5 class="card-title">{{villager.name}}</h5>
+                <p class="card-text">
+                    <ul>
+                        <li>Espèce : {{villager.species}}</li>
+                        <li>Genre : {{villager.gender}}</li>
+                        <li>Anniversaire : {{villager.birthday}}</li>
+                    </ul>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="villager.owned" id="possCheck"
+                            (change)="generateUrl()">
+                        <label class="form-check-label" for="possCheck">
+                            Possédé
+                        </label>
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-danger" (click)="delete(villager)">Supprimer</button>
             </div>
-            <hr>
-            <button type="button" class="btn btn-danger" (click)="delete(villager)">Supprimer</button>
+        </div>
+        <!-- 3 A refactor en sous composant -->
+    </div>
+</div>
+<hr>
+<p>
+    <button class="btn btn-primary" type="button" (click)="showHideCriteria()">
+        Afficher/Masquer la recherche par critère
+    </button>
+</p>
+<!-- 4 A refactor en sous composant de recherche par critères -->
+<div class="container" *ngIf="showCriteria">
+    <div class="row">
+        <div class="col-auto">
+            <div class="form-group">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Genre :</div>
+                    </div>
+                    <select class="form-control" id="selectGender" [(ngModel)]="genderCriteria">
+                    <option *ngFor="let g of getListGender()" value="{{g.value}}">{{g.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-group">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Espèce :</div>
+                    </div>
+                    <select class="form-control" id="selectSpecies" [(ngModel)]="speciesCriteria">
+                    <option *ngFor="let s of getListSpecies()" value="{{s.value}}">{{s.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card col-sm-3" *ngFor="let villager of vill | villagerFilter: { species: speciesCriteria, gender: genderCriteria }">
+            <img class="card-img-top card-image"
+                src="https://villagerdb.com/images/villagers/medium/{{villager.id}}.png" alt="{{villager.name}}">
+            <div class="card-body">
+                <h5 class="card-title">{{villager.name}}</h5>
+                <p class="card-text">
+                    <ul>
+                        <li>Espèce : {{villager.species}}</li>
+                        <li>Genre : {{villager.gender}}</li>
+                        <li>Anniversaire : {{villager.birthday}}</li>
+                    </ul>
+                    <hr>
+                    <button type="button" class="btn btn-info" (click)="add(villager)">Ajouter</button>
             </div>
         </div>
     </div>
 </div>
+<!-- 4 A refactor en sous composant -->
